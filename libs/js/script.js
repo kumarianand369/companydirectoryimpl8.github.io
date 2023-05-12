@@ -523,7 +523,6 @@ function getPersonnel(id) {
 			$('#getJobTitle').val(data.personnel[0].jobTitle);
 			$('#getEmail').val(data.personnel[0].email);
 			$('#deptSelect3').val(data.personnel[0].departmentID).change();
-		//	$('#getEmpLoc').val(data.personnel[0].location);
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			console.log('error');
@@ -543,7 +542,6 @@ function getDepartment(id) {
 		success: function(result) {
 			var data = result.data[0];
 			$('#getDeptName').val(data.name);
-		//	$('#locSelect3').val(data.locationID).change();	
 		},
 		error: function(jqXHR, textStatus, errorThrown) {
 			console.log('error');
