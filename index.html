@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Company Directory</title>
+        <meta name="author" content="Khushi">
+        <meta name="description" content="Curd Operation PHP JQUERY">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+         <!-- Favicon -->
+        <link rel="shortcut icon" href="favicon.ico">
+        <!--Bootstrap-->
+        <link rel="stylesheet" href="libs/data/css/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="libs/data/css/bootstrap/bootstrap-table.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="libs/data/css/all.css">
+        <!-- Custom Stylesheet --> 
+        <link rel="stylesheet" href="libs/css/style.css">
+
+    </head>
+
+<body>
+<!-- preloader -->
+ <div id="preloader"></div>
+
+<!--Header -->  
+<div class="topnav">
+    <a class="active"><strong><i><span class="navbar-text">Company Directory</span></i></strong></a>
+    <div class="topnav-right">
+        <a id="navEmployees" href="#">Employees</a>
+        <a id="navDepartment" href="#">Departments</a>
+        <a id="navLocation"  href="#">Locations</a>
+        <a>
+        <button type="button" id="refreshButton" class=" refreshScreen btn"><i class="fas fa-sync"></i></button>
+        </a>
+    </div>
+  </div>
+
+<!---Main Function--->
+<main >
+  <div id="dataTable" class="tab-content"></div>
+
+<!---======add Employee=========-->
+<div class="modal" tabindex="-1" id="addEmployeeModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="card-header bg-info text-white">
+                <h3 id="addSelector" value="emp">Add Employee
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </h3>
+            </div>
+            <div class="modal-body" id="addemp">                        
+                <form id="addEmpForm">
+                    <label for="addFirstName">First Name:</label><br>
+                    <input type="text" id="addFirstName" name="addFirstName" required class="textField form-control" placeholder="First Name">
+                    <label for="addLastName">Last Name:</label><br>
+                    <input type="text" id="addLastName" name="addLastName" required class="textField form-control" placeholder="Last Name">
+                    <label for="addJobTitle">Job Title:</label><br>
+                    <input type="text" id="addJobTitle" name="addJobTitle" class="textField form-control" placeholder="Job Title">
+                    <label for="addEmail" >E-mail:</label><br>
+                    <input type="email" id="addEmail" name="addEmail" class="textField form-control" placeholder="Email">
+                  
+                    <label for="departmentSelect2">Department:</label>
+                    <select class='form-control' id="departmentSelect2" name="departmentSelect2">
+                    <option>Select Department--</option>
+                    </select>
+                    <br>   
+                </form>
+            </div> 
+                <div class="modal-footer justify-content-center card-header bg-info text-white">
+                    <button type="button" class="btn btn-confirm" id="submitAddEmployee">Save</button>
+                </div>
+        </div>
+    </div>
+</div>
+<!---====end of add employee======-->
+
+<!---====add department========-->
+<div class="modal" tabindex="-1" id="addDepartmentModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="card-header bg-info text-white">
+                <h3 id="addSelector" value="dept">Add Department
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </h3>
+            </div>   
+        <div class="modal-body">                        
+            <label for="AddDept">Department:</label><br>
+            <input type="text" id="AddDept" name="AddDept" required class="textField form-control" placeholder="Department">
+            <label for="locSelect2">Location:</label>
+            <select class='form-control' id="locSelect2" name="locSelect2">
+                <option>Select location--</option>
+            </select>
+            <br>
+        </div>
+        <div class="modal-footer justify-content-center card-header bg-info text-white">
+            <button type="button" class="btn btn-confirm" id="submitAddDepartment" data-dismiss="modal" data-target="#addDeptModal">Save</button>
+        </div>
+       
+        </div> 
+    </div>
+</div>
+
+
+
+<!---======== end of add department ===============-->
+
+<!---========= add location ==============-->
+<div class="modal" tabindex="-1" id="addLocationModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="card-header bg-info text-white">
+                <h3 id="addSelector" value="loc">Add Location
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </h3>
+            </div>
+            <div class="modal-body">                        
+                <label for="loc">Location:</label><br>
+                <input type="text" id="loc" name="loc" required class="textField form-control" placeholder="Location">
+                <br>    
+            </div> 
+            <div class="modal-footer justify-content-center card-header bg-info text-white">
+                <button type="button" class="btn btn-confirm" id="submitAddLocation" data-dismiss="modal" data-target="#addLocModal">Save</button>
+            </div>  
+        </div>
+    </div>
+</div>
+
+<!---==========end of add location================-->
+
+<!-- Empty Model-->
+<div id="dataNeededModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-times-circle"></i>						
+                <h4 class="modal-title w-100">Insufficient Data</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>This form is missing necessary data, complete form and re-submit</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<!-- Confirm Employee Add --->
+<div id="addEmpModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-check-circle"></i>						
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to add this record?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-confirm" id="addEmpButton" data-toggle="modal" data-target="#confirmationEmpModal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>   
+
+ <!-- Confirmation Message Employee Add-->
+ <div id="confirmationEmpModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Alert!</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="confirmationMessage">
+                <h5 class="modal-title">Entry successfully added.</h5>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-confirm" id="saveEmpOkButton"data-dismiss="modal">OK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Confirm Department Add -->
+<div id="addDeptModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-check-circle"></i>						
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to add this record?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-confirm" id="addDeptButton" data-toggle="modal" data-target="#confirmationDepModal">Save</button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<!-- Confirmation Message Department Add-->
+<div id="confirmationDepModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Alert!</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="confirmationMessage">
+                <h6 class="modal-title">Department successfully added.</h6>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-confirm" id="saveDepOkButton"data-dismiss="modal">OK</button>
+            </div>
+        </div>
+
+    </div>
+</div> 
+<!-- Confirm Location Add --->
+<div id="addLocModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-check-circle"></i>						
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to add this record?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-confirm" id="addLocButton" data-toggle="modal" data-target="#confirmationLocModal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Confirmation Message Location Add-->
+<div id="confirmationLocModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Alert!</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body" id="confirmationMessage">
+                <h6 class="modal-title">Location successfully added.</h6>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-confirm" id="saveLocOkButton"data-dismiss="modal">OK</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Edit Employee Modal --->
+<div class="modal" tabindex="-1" id="editModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="countryName">Edit Employee Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">                        
+                <form>
+                    <label for="getFirstName">First Name:</label><br>
+                    <input type="text" id="getFirstName" name="getFirstName" required class="textField form-control">
+                    <label for="getLastName">Last Name:</label><br>
+                    <input type="text" id="getLastName" name="getLastName" required class="textField form-control">
+                    <label for="getJobTitle">Job Title:</label><br>
+                    <input type="text" id="getJobTitle" name="getJobTitle" class="textField form-control">
+                    <label for="getEmail" >E-mail:</label><br>
+                    <input type="email" id="getEmail" name="getEmail" class="textField form-control">
+                    <label for="getEmployeeDepartment">Department:</label><br>
+                    <span id="getEmployeeDepartment"></span>
+                    <label for="getEmpLoc">Location:</label><br>
+                    <input type="text" id="getEmpLoc" name="getEmpLoc" readonly class="textField form-control">
+                   
+                </form>
+            </div> 
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-confirm" id="submitEmp">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Departments Modal -->
+<div class="modal" tabindex="-1" id="editDeptModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Department Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">                        
+                <form>
+                    <label for="getDeptName">Name:</label><br>
+                    <input type="text" id="getDeptName" name="getDeptName" required class="textField form-control">
+                    <label for="getDepartmenttLocation">Location:</label><br>
+                    <span id="getDepartmenttLocation"></span>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-confirm" id="submitDept">Save</button>
+            </div>   
+        </div>
+    </div>
+</div>
+<!-- Edit Location Modal --->
+<div class="modal" tabindex="-1" id="editLocModal">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Location Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">                        
+                <form>
+                    <label for="getLocName">Name:</label><br>
+                    <input type="text" id="getLocName" name="getLocName" required class="textField form-control">
+                </form>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-confirm" id="submitLoc">Save</button>
+            </div>   
+        </div>
+    </div>
+</div>
+
+<!-- Confirm Employee Update **-->
+<div id="editEmpModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-check-circle"></i>
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to update these records?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-confirm" id="saveEmpButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>     
+
+       
+<!-- Confirm Department Update --->
+<div id="editDeptConfirmModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-check-circle"></i>
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to update these records?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-confirm" id="saveDeptButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+<!-- Confirm Location Update --->
+<div id="editLocConfirmModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-check-circle"></i>
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to update these records?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-confirm" id="saveLocButton">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DELETE all 3 tables---->
+
+<!-- Cannot Delete Department--->
+<div id="cannotDeleteDepartmentModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-times-circle"></i>						
+                <h4 class="modal-title w-100">Cannot Delete</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>This department has employees currently working here. Move employee to new positions before deleting.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<!-- Cannot Delete Location---->
+<div id="cannotDeleteLocationModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-times-circle"></i>						
+                <h4 class="modal-title w-100">Cannot Delete</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>This location has departments currently assigned to it. Move departments to new locations before deleting.</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>   
+<!--Confirm Delete all 3 table-->       
+<!-- Confirm Employee Delete -->
+<div id="delEmpModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-times-circle"></i>						
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to delete these records?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="delEmpButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>          
+            
+<!-- Confirm Department Delete -->
+<div id="delDeptModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-times-circle"></i>						
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to delete these records?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="delDeptButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+<!-- Confirm Location Delete -->
+<div id="delLocModal" class="modal fade">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <i class="fas fa-times-circle"></i>						
+                <h4 class="modal-title w-100">Are you sure?</h4>	
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modalbody">
+                <p>Do you really want to delete these records?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-danger" id="delLocButton">Delete</button>
+            </div>
+        </div>
+    </div>
+</div> 
+
+
+        
+<!-- Back to Top --->
+<a id="back-to-top" href="#" class="btn btn-light btn-lg back-to-top"><i class="fas fa-chevron-up"></i></a>           
+</main>
+
+   <!-- scripts -->
+   <script src="libs/data/js/bootstrap/jquery-3.5.1.min.js"></script>
+   <!--Bootstrap-->
+   <script src="libs/data/js/bootstrap/bootstrap.js"></script>
+   <script src="libs/data/js/bootstrap/bootstrap-table.min.js"></script>
+   <!-- Font Awesome -->
+   <script src="libs/data/js/all.js"></script>
+
+   <script src="libs/js/script.js"></script>
+
+       
+  </body>
+</html>
